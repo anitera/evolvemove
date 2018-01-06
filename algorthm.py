@@ -235,24 +235,17 @@ class GUI(Frame):
         self.pack(fill=BOTH, expand=1)
 
         self.canvas = Canvas(self)
-        self.canvas.create_rectangle(0, 0, 600, 600,
-                                outline="#aa1", fill="#aa1")
+        self.canvas.create_rectangle(10, 100, 800, 1000,
+                                outline="#00fbaa", fill="#00fbaa")
 
         self.canvas.pack(fill=BOTH, expand=1)
         #root.after(0, self.animation)
 
     def animation(self):
+        self.canvas.create_rectangle(start_point[0], start_point[1], start_point[0]+5, start_point[1]+5, outline="#a50", fill="#a50")
+        self.canvas.create_rectangle(end_point[0], end_point[1], end_point[0]+5, end_point[1]+5, outline="#a50", fill="#a50")
 
-        # parameters of one user
-        mutationRate = 0.1
-        crossoverProbability = 0.7
-        elitism = True
-        step = 2
-        individSize = 800
-        populationSize = 100
-        chooseFromAll = False
-        crossoverFunc = 2
-        parentFunc = 'wheel'
+        # algorithm
 
         ga = GA(user_mutationRate=mutationRate, user_crossoverProbability=crossoverProbability, user_elitism=elitism,
                 user_crossoverFunction=crossoverFunc, user_parentSelection=parentFunc)
@@ -260,12 +253,19 @@ class GUI(Frame):
                                               user_populationSize=populationSize)
         print('min fitness ', min(initialPop.getFitness()))
         print('evolve function: ')
-        while not any(np.array(initialPop.getFitness()) == 0):
+        dont_change = 0
+        prev = -1
+        while (not any(np.array(initialPop.getFitness()) == 0)) and (dont_change < 50):
             initialPop = ga.evolve(step=step, individSize=individSize, populationSize=populationSize,
                                    generation=initialPop,
                                    user_chooseFromAll=chooseFromAll)
             # print('all fitness ', initialPop.getFitness())
             print('min fitness ', min(initialPop.getFitness()))
+            if prev == min(initialPop.getFitness()):
+                dont_change += 1
+            prev = min(initialPop.getFitness())
+            print(dont_change)
+
 
         best_individ = initialPop.getBest(1)
         self.coord = best_individ.getFinalRoute()
@@ -287,23 +287,37 @@ def anime():
     # gameField.addCircle((70,70),10)
     # ex = GUI(vector, root)
     root.geometry("900x600")
-    coordx = 0
-
     e = Entry(root)
+    l = Label(root, text = 'Start coordinate')
     e.pack()
+    l.pack()
     e.focus_set()
-
-    def set_coordx():
-        global start_point = (e.get(), e.get())
-        print(coordx)
-
-    b = Button(root, text="Coord X Start", width=10, command=lambda: set_coordx())
-    b.pack()
+    e.place(x=0, y=0, height=15, width=50)
+    l.place(x=0, y=50, height=25, width=50)
 
     e1 = Entry(root)
+    #e1.place(relx = 1, rely = 2)
     e1.pack()
-
     e1.focus_set()
+    e1.place(x=60, y=0, height=15, width=50)
+
+    e2 = Entry(root)
+    #e2.place(relx = 1, rely = 3)
+    e2.pack()
+    e2.focus_set()
+    e2.place(x=120, y=0, height=15, width=50)
+
+
+    def set_params():
+        global start_point, end_point, crossoverProbability
+        start_point = (int(str(e.get()).split(' ')[0]), int(str(e.get()).split(' ')[1]))
+        print(start_point)
+        end_point = (int(str(e1.get()).split(' ')[0]), int(str(e1.get()).split(' ')[1]))
+        crossoverProbability = float(str(e2.get()))
+
+
+    b = Button(root, text="Coord X Start", width=10, command=lambda: set_params())
+    b.pack()
 
     ex = GUI(root)
     b1 = Button(root, text="Start", command=ex.animation)
@@ -314,6 +328,16 @@ def anime():
 if __name__ == '__main__':
     # common parameters for all users
     gameField = Field(size=(600, 600))
-    start_point = (50, 10)
-    end_point = (450, 90)
+    start_point = (10, 10)
+    end_point = (150, 100)
+
+    mutationRate = 0.1
+    crossoverProbability = 0.7
+    elitism = True
+    step = 2
+    individSize = 800
+    populationSize = 100
+    chooseFromAll = False
+    crossoverFunc = 2
+    parentFunc = 'wheel'
     anime()
