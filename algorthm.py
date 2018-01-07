@@ -71,6 +71,40 @@ class Field:
             for j in range(min(0, center[1] - radius), max(self.field_size[1], center[1] + radius)):
                 if (center[0] - i) ** 2 + (center[1] - j) ** 2 <= radius ** 2:
                     self.matrix[i, j] = 1
+                    
+    
+    def newstar(self, start, height): #two triangles
+        #coef = width/height
+        coef = 1
+        #self.matrix[start[0], start[1]] = 1
+        for i in range(1, int(0.2*height)+1):
+            coef = 1
+            for j in range(0, i):
+                self.matrix[start[0]+i, start[1]+int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]-int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]] = 1
+                
+        #coef = width/height     
+
+        for i in range(int(0.2*height+1), int(0.8*height-1)):
+            
+            for j in range(0, i):
+                self.matrix[start[0]+i, start[1]+int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]-int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]] = 1
+            #coef = coef - 0.01     
+        for i in range(int(0.2*height)+1, int(height)):
+            for j in range(int(0.8*height-i), 0, -1):
+                self.matrix[start[0]+i, start[1]+int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]-int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]] = 1
+                
+        for i in range(int(0.8*height)-1, height+1):
+            coef = 1
+            for j in range(int(height-i-2), -1, -1):
+                self.matrix[start[0]+i, start[1]+int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]-int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]] = 1
 
     # add diff shapes of blocks
 
