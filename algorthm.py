@@ -287,11 +287,28 @@ class GUI(Frame):
         print('evolve function: ')
         dont_change = 0
         prev = -1
+        i = -1
         while (not any(np.array(initialPop.getFitness()) == 0)) and (dont_change < 50):
+            i+=1
             initialPop = ga.evolve(step=step, individSize=individSize, populationSize=populationSize,
                                    generation=initialPop,
                                    user_chooseFromAll=chooseFromAll)
-            # print('all fitness ', initialPop.getFitness())
+
+            best = initialPop.getBest(1)
+            self.coord = best.getFinalRoute()
+            self.canvas.create_rectangle(0, 0, 500, 500,
+                                         outline="#00fbaa", fill="#00fbaa")
+            self.canvas.create_rectangle(start_point[0], start_point[1], start_point[0] + 5,
+                                         start_point[1] + 5, outline="#a50", fill="#a50")
+            self.canvas.create_rectangle(end_point[0], end_point[1], end_point[0] + 5, end_point[1] + 5,
+                                         outline="#a50", fill="#a50")
+            for i in range(self.coord.shape[1]):
+                #time.sleep(0.005)
+                self.canvas.create_rectangle(self.coord[:, i][0], self.coord[:, i][1], self.coord[:, i][0] + 1,
+                                             self.coord[:, i][1] + 1,
+                                             outline="#f50", fill="#f50")
+                self.canvas.update()
+
             print('min fitness ', min(initialPop.getFitness()))
             if prev == min(initialPop.getFitness()):
                 dont_change += 1
@@ -299,14 +316,6 @@ class GUI(Frame):
             print(dont_change)
 
 
-        best_individ = initialPop.getBest(1)
-        self.coord = best_individ.getFinalRoute()
-
-        for i in range(self.coord.shape[1]):
-            time.sleep(0.005)
-            self.canvas.create_rectangle(self.coord[:, i][0], self.coord[:, i][1], self.coord[:, i][0]+3, self.coord[:, i][1]+3,
-                                    outline="#f50", fill="#f50")
-            self.canvas.update()
 
 
 def anime():
@@ -451,8 +460,7 @@ def anime():
     e21.grid(row=20, column=3)
     l21.grid(row=21, column=3)
 
-
-    def set_params():
+    def set_params_first():
         global start_point, end_point, mutationRate, crossoverProbability, elitism, step, individSize, populationSize, chooseFromAll, crossoverFunc, parentFunc
         start_point = (int(str(e.get()).split(' ')[0]), int(str(e.get()).split(' ')[1]))
         print(start_point)
@@ -460,8 +468,14 @@ def anime():
         crossoverProbability = float(str(e2.get()))
         mutationRate = float(e3.get())
         step = int(e4.get())
+        elitism = e5.get()
+        individSize = int(e6.get())
+        populationSize = int(e7.get())
+        chooseFromAll = e8.get()
+        crossoverFunc = int(e9.get())
+        parentFunc = int(e10.get())
 
-    b = Button(root, text="Coord X Start", width=10, command=lambda: set_params())
+    b = Button(root, text="Set parameters for 1st path", width=10, command=lambda: set_params_first())
     b.grid(row = 0, column = 4)
 
     ex = GUI(root)
