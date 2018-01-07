@@ -3,6 +3,7 @@ import operator
 import random
 import copy
 from tkinter import *
+import threading
 import time
 
 class Point:
@@ -12,7 +13,6 @@ class Point:
             self.coord = (x,y)
         else:
             self.coord = (10,10) #int(random.random() * 200)
-
 
 class Individ:
     def __init__(self, step, size):
@@ -263,6 +263,7 @@ class GUI(Frame):
         super().__init__()
         self.coord = None
         self.initUI(root)
+        self.coord2 = None
 
     def initUI(self, root):
         self.master.title("Project")
@@ -277,36 +278,76 @@ class GUI(Frame):
         self.canvas.create_rectangle(start_point[0], start_point[1], start_point[0]+5, start_point[1]+5, outline="#a50", fill="#a50")
         self.canvas.create_rectangle(end_point[0], end_point[1], end_point[0]+5, end_point[1]+5, outline="#a50", fill="#a50")
 
+        self.canvas.create_rectangle(41, 20, 100, 40, outline="grey",
+                                     fill="grey")
+        self.canvas.create_rectangle(0, 60, 59, 80, outline="grey",
+                                     fill="grey")
+        self.canvas.create_rectangle(60, 100, 100, 120, outline="grey",
+                                     fill="grey")
+        self.canvas.create_oval(110, 110, 130, 130, fill="grey", outline="grey")
+
         # algorithm
+        gameField.addSquareBlock((41, 20), (100, 40))
+        gameField.addSquareBlock((0, 60), (59, 80))
+        gameField.addSquareBlock((60, 100), (100, 120))
+        gameField.addCircle((100, 120), 10)
 
         ga = GA(user_mutationRate=mutationRate, user_crossoverProbability=crossoverProbability, user_elitism=elitism,
                 user_crossoverFunction=crossoverFunc, user_parentSelection=parentFunc)
         initialPop = ga.CreateFirstPopulation(user_step=step, user_individSize=individSize,
                                               user_populationSize=populationSize)
+
+        ga2 = GA(user_mutationRate=mutationRate2, user_crossoverProbability=crossoverProbability2, user_elitism=elitism2,
+                user_crossoverFunction=crossoverFunc2, user_parentSelection=parentFunc2)
+        initialPop2 = ga2.CreateFirstPopulation(user_step=step2, user_individSize=individSize2,
+                                              user_populationSize=populationSize2)
+
         print('min fitness ', min(initialPop.getFitness()))
+        print('min fitness ', min(initialPop2.getFitness()))
         print('evolve function: ')
         dont_change = 0
         prev = -1
         i = -1
-        while (not any(np.array(initialPop.getFitness()) == 0)) and (dont_change < 50):
+        while (not any(np.array(initialPop.getFitness()) < 9)) and (dont_change < 50):
             i+=1
             initialPop = ga.evolve(step=step, individSize=individSize, populationSize=populationSize,
                                    generation=initialPop,
                                    user_chooseFromAll=chooseFromAll)
+            initialPop2 = ga2.evolve(step=step2, individSize=individSize2, populationSize=populationSize2,
+                                   generation=initialPop2,
+                                   user_chooseFromAll=chooseFromAll2)
 
             best = initialPop.getBest(1)
             self.coord = best.getFinalRoute()
+            best2 = initialPop2.getBest(1)
+            self.coord2 = best2.getFinalRoute()
             self.canvas.create_rectangle(0, 0, 500, 500,
                                          outline="#00fbaa", fill="#00fbaa")
             self.canvas.create_rectangle(start_point[0], start_point[1], start_point[0] + 5,
                                          start_point[1] + 5, outline="#a50", fill="#a50")
             self.canvas.create_rectangle(end_point[0], end_point[1], end_point[0] + 5, end_point[1] + 5,
                                          outline="#a50", fill="#a50")
-            for i in range(self.coord.shape[1]):
+            self.canvas.create_rectangle(41, 20, 100, 40, outline="grey",
+                                         fill="grey")
+            self.canvas.create_rectangle(0, 60, 59, 80, outline="grey",
+                                         fill="grey")
+            self.canvas.create_rectangle(60, 100, 100, 120, outline="grey",
+                                         fill="grey")
+            self.canvas.create_oval(110, 110, 130, 130, fill="grey", outline="grey")
+            max_coord = max(self.coord.shape[1], self.coord2.shape[1])
+            print(self.coord.shape[1])
+            print(self.coord2.shape[1])
+            print(max_coord)
+            for i in range(max_coord):
                 #time.sleep(0.005)
-                self.canvas.create_rectangle(self.coord[:, i][0], self.coord[:, i][1], self.coord[:, i][0] + 1,
-                                             self.coord[:, i][1] + 1,
-                                             outline="#f50", fill="#f50")
+                if i < self.coord.shape[1]:
+                    self.canvas.create_rectangle(self.coord[:, i][0], self.coord[:, i][1], self.coord[:, i][0] + 2,
+                                                 self.coord[:, i][1] + 2,
+                                                 outline="#f50", fill="#f50")
+                if i < self.coord2.shape[1]:
+                    self.canvas.create_rectangle(self.coord2[:, i][0], self.coord2[:, i][1], self.coord2[:, i][0] + 2,
+                                                 self.coord2[:, i][1] + 2,
+                                                 outline="blue", fill="blue")
                 self.canvas.update()
 
             print('min fitness ', min(initialPop.getFitness()))
@@ -315,18 +356,9 @@ class GUI(Frame):
             prev = min(initialPop.getFitness())
             print(dont_change)
 
-
-
-
 def anime():
     root = Tk()
     #### start algorithm
-    #gameField = gf
-    # gameField.addSquareBlock((41, 20), (100, 40))
-    # gameField.addSquareBlock((0, 60), (59, 80))
-    # gameField.addSquareBlock((40,60),(60,70))
-    # gameField.addCircle((70,70),10)
-    # ex = GUI(vector, root)
     root.geometry("900x600")
     e = Entry(root)
     l = Label(root, text = 'Start coordinate')
@@ -461,9 +493,8 @@ def anime():
     l21.grid(row=21, column=3)
 
     def set_params_first():
-        global start_point, end_point, mutationRate, crossoverProbability, elitism, step, individSize, populationSize, chooseFromAll, crossoverFunc, parentFunc
+        global start_point, end_point, mutationRate, crossoverProbability, elitism, step, individSize, populationSize, chooseFromAll, crossoverFunc, parentFunc, mutationRate2, crossoverProbability2, elitism2, step2, individSize2, populationSize2, chooseFromAll2, crossoverFunc2, parentFunc2
         start_point = (int(str(e.get()).split(' ')[0]), int(str(e.get()).split(' ')[1]))
-        print(start_point)
         end_point = (int(str(e1.get()).split(' ')[0]), int(str(e1.get()).split(' ')[1]))
         crossoverProbability = float(str(e2.get()))
         mutationRate = float(e3.get())
@@ -475,28 +506,50 @@ def anime():
         crossoverFunc = int(e9.get())
         parentFunc = int(e10.get())
 
-    b = Button(root, text="Set parameters for 1st path", width=10, command=lambda: set_params_first())
+        crossoverProbability2 = float(str(e13.get()))
+        mutationRate2 = float(e14.get())
+        step2 = int(e15.get())
+        elitism2 = e16.get()
+        individSize2 = int(e17.get())
+        populationSize2 = int(e18.get())
+        chooseFromAll2 = e19.get()
+        crossoverFunc2 = int(e20.get())
+        parentFunc2 = int(e21.get())
+
+    b = Button(root, text="Set parameters", width=30, command=lambda: set_params_first())
     b.grid(row = 0, column = 4)
 
     ex = GUI(root)
-    b1 = Button(root, text="Start", command=ex.animation)
-    b1.grid(row = 0, column = 5)
+    b1 = Button(root, text="Start", width = 30, command=ex.animation)
+    b1.grid(row = 2, column = 4)
 
     root.mainloop()
 
 if __name__ == '__main__':
     # common parameters for all users
-    gameField = Field(size=(600, 600))
     start_point = (10, 10)
-    end_point = (150, 100)
+    end_point = (190, 190)
+
+    gameField = Field(size=(600, 600))
 
     mutationRate = 0.1
     crossoverProbability = 0.7
     elitism = True
     step = 2
-    individSize = 800
+    individSize = 3000
     populationSize = 100
     chooseFromAll = False
     crossoverFunc = 2
     parentFunc = 'wheel'
+
+    mutationRate2 = 0.5
+    crossoverProbability2 = 0.9
+    elitism2 = True
+    step2 = 2
+    individSize2 = 3000
+    populationSize2 = 100
+    chooseFromAll2 = False
+    crossoverFunc2 = 2
+    parentFunc2 = 'wheel'
+
     anime()
