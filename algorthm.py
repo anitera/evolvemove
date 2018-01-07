@@ -231,15 +231,13 @@ class GUI(Frame):
         self.initUI(root)
 
     def initUI(self, root):
-        self.master.title("Colours")
-        self.pack(fill=BOTH, expand=1)
-
-        self.canvas = Canvas(self)
-        self.canvas.create_rectangle(10, 100, 800, 1000,
+        self.master.title("Project")
+        self.grid(row = 0, column = 1, rowspan = 20)
+        self.canvas = Canvas(self,width=500, height=500,)
+        self.canvas.create_rectangle(0, 0, 500, 500,
                                 outline="#00fbaa", fill="#00fbaa")
 
-        self.canvas.pack(fill=BOTH, expand=1)
-        #root.after(0, self.animation)
+        self.canvas.grid(row=0, column=0, sticky="we")
 
     def animation(self):
         self.canvas.create_rectangle(start_point[0], start_point[1], start_point[0]+5, start_point[1]+5, outline="#a50", fill="#a50")
@@ -289,39 +287,152 @@ def anime():
     root.geometry("900x600")
     e = Entry(root)
     l = Label(root, text = 'Start coordinate')
-    e.pack()
-    l.pack()
     e.focus_set()
-    e.place(x=0, y=0, height=15, width=50)
-    l.place(x=0, y=50, height=25, width=50)
+    e.grid(row=0, column=0)
+    l.grid(row=1, column=0)
 
     e1 = Entry(root)
-    #e1.place(relx = 1, rely = 2)
-    e1.pack()
+    l1 = Label(root, text='End coordinate')
     e1.focus_set()
-    e1.place(x=60, y=0, height=15, width=50)
+    e1.grid(row=2, column=0)
+    l1.grid(row=3, column=0)
 
     e2 = Entry(root)
-    #e2.place(relx = 1, rely = 3)
-    e2.pack()
+    l2 = Label(root, text = 'Crossover probability')
     e2.focus_set()
-    e2.place(x=120, y=0, height=15, width=50)
+    e2.grid(row=4, column=0)
+    l2.grid(row=5, column=0)
+
+    e3 = Entry(root)
+    l3 = Label(root, text='Mutation rate')
+    e3.focus_set()
+    e3.grid(row=6, column=0)
+    l3.grid(row=7, column=0)
+
+    e4 = Entry(root)
+    l4 = Label(root, text='Step')
+    e4.focus_set()
+    e4.grid(row=8, column=0)
+    l4.grid(row=9, column=0)
+
+    e5 = Entry(root)
+    l5 = Label(root, text='Elitism')
+    e5.focus_set()
+    e5.grid(row=10, column=0)
+    l5.grid(row=11, column=0)
+
+    e6 = Entry(root)
+    l6 = Label(root, text='Size of individ')
+    e6.focus_set()
+    e6.grid(row=12, column=0)
+    l6.grid(row=13, column=0)
+
+    e7 = Entry(root)
+    l7 = Label(root, text='Population size')
+    e7.focus_set()
+    e7.grid(row=14, column=0)
+    l7.grid(row=15, column=0)
+
+    e8 = Entry(root)
+    l8 = Label(root, text='Choose from all?')
+    e8.focus_set()
+    e8.grid(row=16, column=0)
+    l8.grid(row=17, column=0)
+
+    e9 = Entry(root)
+    l9 = Label(root, text='Crossover function')
+    e9.focus_set()
+    e9.grid(row=18, column=0)
+    l9.grid(row=19, column=0)
+
+    e10 = Entry(root)
+    l10 = Label(root, text='Parent function')
+    e10.focus_set()
+    e10.grid(row=20, column=0)
+    l10.grid(row=21, column=0)
+
+    e11 = Entry(root)
+    l11 = Label(root, text = 'Start coordinate')
+    e11.focus_set()
+    e11.grid(row=0, column=3)
+    l11.grid(row=1, column=3)
+
+    e12 = Entry(root)
+    l12 = Label(root, text='End coordinate')
+    e12.focus_set()
+    e12.grid(row=2, column=3)
+    l12.grid(row=3, column=3)
+
+    e13 = Entry(root)
+    l13 = Label(root, text = 'Crossover probability')
+    e13.focus_set()
+    e13.grid(row=4, column=3)
+    l13.grid(row=5, column=3)
+
+    e14 = Entry(root)
+    l14 = Label(root, text='Mutation rate')
+    e14.focus_set()
+    e14.grid(row=6, column=3)
+    l14.grid(row=7, column=3)
+
+    e15 = Entry(root)
+    l15 = Label(root, text='Step')
+    e15.focus_set()
+    e15.grid(row=8, column=3)
+    l15.grid(row=9, column=3)
+
+    e16 = Entry(root)
+    l16 = Label(root, text='Elitism')
+    e16.focus_set()
+    e16.grid(row=10, column=3)
+    l16.grid(row=11, column=3)
+
+    e17 = Entry(root)
+    l17 = Label(root, text='Size of individ')
+    e17.focus_set()
+    e17.grid(row=12, column=3)
+    l17.grid(row=13, column=3)
+
+    e18 = Entry(root)
+    l18 = Label(root, text='Population size')
+    e18.focus_set()
+    e18.grid(row=14, column=3)
+    l18.grid(row=15, column=3)
+
+    e19 = Entry(root)
+    l19 = Label(root, text='Choose from all?')
+    e19.focus_set()
+    e19.grid(row=16, column=3)
+    l19.grid(row=17, column=3)
+
+    e20 = Entry(root)
+    l20 = Label(root, text='Crossover function')
+    e20.focus_set()
+    e20.grid(row=18, column=3)
+    l20.grid(row=19, column=3)
+
+    e21 = Entry(root)
+    l21 = Label(root, text='Parent function')
+    e21.focus_set()
+    e21.grid(row=20, column=3)
+    l21.grid(row=21, column=3)
 
 
     def set_params():
-        global start_point, end_point, crossoverProbability
+        global start_point, end_point, mutationRate, crossoverProbability, elitism, step, individSize, populationSize, chooseFromAll, crossoverFunc, parentFunc
         start_point = (int(str(e.get()).split(' ')[0]), int(str(e.get()).split(' ')[1]))
         print(start_point)
         end_point = (int(str(e1.get()).split(' ')[0]), int(str(e1.get()).split(' ')[1]))
         crossoverProbability = float(str(e2.get()))
-
+        mutationRate = float(e3.get())
+        step = int(e4.get())
 
     b = Button(root, text="Coord X Start", width=10, command=lambda: set_params())
-    b.pack()
+    b.grid(row = 0, column = 4)
 
     ex = GUI(root)
     b1 = Button(root, text="Start", command=ex.animation)
-    b1.pack()
+    b1.grid(row = 0, column = 5)
 
     root.mainloop()
 
