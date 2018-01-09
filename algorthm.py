@@ -316,76 +316,75 @@ class GUI(Frame):
     def initUI(self, root):
         self.master.title("Project")
         self.grid(row = 0, column = 1, rowspan = 20)
-        self.canvas = Canvas(self,width=600, height=600,)
-        self.canvas.create_rectangle(0, 0, 600, 600,
+        self.canvas = Canvas(self,width=300, height=300,)
+        self.canvas.create_rectangle(0, 0, 300, 300,
                                 outline="#00fbaa", fill="#00fbaa")
 
         self.canvas.grid(row=0, column=0, sticky="we")
 
     def animation(self):
+        global start_point, end_point
         if level == 1:
-            global start_point, end_point
+            self.canvas.create_rectangle(0, 0, 300, 300, outline="#00fbaa", fill="#00fbaa")
             start_point = (10, 10)
-            end_point = (590, 590)
+            end_point = (290, 290)
             self.canvas.create_rectangle(start_point[0], start_point[1], start_point[0] + 5, start_point[1] + 5,
                                          outline="#a50", fill="#a50")
             self.canvas.create_rectangle(end_point[0], end_point[1], end_point[0] + 5, end_point[1] + 5, outline="#a50",
                                          fill="#a50")
 
-            gameField.addCircle((300, 300), 50)
+            gameField.addCircle((150, 150), 25)
         elif level == 2:
-            global start_point, end_point
-            start_point = (300, 50)
-            end_point = (300, 550)
+            self.canvas.create_rectangle(0, 0, 300, 300, outline="#00fbaa", fill="#00fbaa")
+            start_point = (150, 25)
+            end_point = (150, 275)
             self.canvas.create_rectangle(start_point[0], start_point[1], start_point[0] + 5, start_point[1] + 5,
                                          outline="#a50", fill="#a50")
             self.canvas.create_rectangle(end_point[0], end_point[1], end_point[0] + 5, end_point[1] + 5, outline="#a50",
                                          fill="#a50")
-            gameField.addSquareBlock((280, 100), (320, 150))
-            gameField.addCircle((265, 250), 50)
-            gameField.addCircle((335, 400), 60)
+            gameField.addSquareBlock((140, 50), (160, 75))
+            gameField.addCircle((133, 125), 25)
+            gameField.addCircle((166, 200), 30)
         elif level == 3:
-            global start_point, end_point
+            self.canvas.create_rectangle(0, 0, 300, 300, outline="#00fbaa", fill="#00fbaa")
             start_point = (25, 25)
-            end_point = (575, 575)
+            end_point = (275, 275)
             self.canvas.create_rectangle(start_point[0], start_point[1], start_point[0] + 5, start_point[1] + 5,
                                          outline="#a50", fill="#a50")
             self.canvas.create_rectangle(end_point[0], end_point[1], end_point[0] + 5, end_point[1] + 5, outline="#a50",
                                          fill="#a50")
-            gameField.addCircle((150, 450), 50)
-            gameField.christmas_tree((250,250),200)
-            gameField.snowflake((150,130),10)
-            gameField.snowflake((200, 430), 10)
-            gameField.snowflake((250, 530), 10)
-            gameField.snowflake((300, 230), 10)
-            gameField.snowflake((350, 400), 10)
-            gameField.snowflake((400, 100), 10)
-            gameField.snowflake((450, 500), 10)
-            gameField.snowflake((500, 250), 10)
-            gameField.snowflake((550, 300), 10)
+            gameField.addCircle((75, 225), 25)
+            gameField.christmas_tree((125,125),100)
+            gameField.snowflake((75,65),5)
+            gameField.snowflake((100, 145),5)
+            gameField.snowflake((125, 265),5)
+            gameField.snowflake((175, 200),5)
+            gameField.snowflake((200, 50),5)
+            gameField.snowflake((225, 250),5)
+            gameField.snowflake((25, 250),5)
+            gameField.snowflake((50, 170),5)
+            gameField.matrix = gameField.matrix.transpose()
         elif level == 4:
-            global start_point, end_point
-            start_point = (300, 50)
-            end_point = (300, 550)
+            self.canvas.create_rectangle(0, 0, 300, 300, outline="#00fbaa", fill="#00fbaa")
+            start_point = (25, 150)
+            end_point = (275, 150)
             self.canvas.create_rectangle(start_point[0], start_point[1], start_point[0] + 5, start_point[1] + 5,
                                          outline="#a50", fill="#a50")
             self.canvas.create_rectangle(end_point[0], end_point[1], end_point[0] + 5, end_point[1] + 5, outline="#a50",
                                          fill="#a50")
-            gameField.addSquareBlock((200, 0), (250, 350))
-            gameField.addSquareBlock((350, 250), (400, 600))
+            gameField.addSquareBlock((100, 0), (250, 175))
+            gameField.addSquareBlock((175, 125), (200, 300))
         elif level == 5:
-            global start_point, end_point
-            start_point = (300, 300)
-            end_point = (550, 550)
+            self.canvas.create_rectangle(0, 0, 300, 300, outline="#00fbaa", fill="#00fbaa")
+            start_point = (150, 150)
+            end_point = (295, 295)
             self.canvas.create_rectangle(start_point[0], start_point[1], start_point[0] + 5, start_point[1] + 5,
                                          outline="#a50", fill="#a50")
             self.canvas.create_rectangle(end_point[0], end_point[1], end_point[0] + 5, end_point[1] + 5, outline="#a50",
                                          fill="#a50")
-            for i in range(25,575,25):
-                for j in range(25,575,25):
+            for i in range(25,275,75):
+                for j in range(25,275,75):
                     gameField.snowflake((i,j),10)
-            gameField.addSquareBlock((200, 0), (250, 350))
-            gameField.addSquareBlock((350, 250), (400, 600))
 
         for i in range(gameField.matrix.shape[0]):
             for j in range(gameField.matrix.shape[1]):
@@ -421,7 +420,7 @@ class GUI(Frame):
             self.coord = best.getFinalRoute()
             best2 = initialPop2.getBest(1)
             self.coord2 = best2.getFinalRoute()
-            self.canvas.create_rectangle(0, 0, 500, 500, outline="#00fbaa", fill="#00fbaa")
+            self.canvas.create_rectangle(0, 0, 600, 600, outline="#00fbaa", fill="#00fbaa")
             self.canvas.create_rectangle(start_point[0], start_point[1], start_point[0] + 5, start_point[1] + 5, outline="#a50", fill="#a50")
             self.canvas.create_rectangle(end_point[0], end_point[1], end_point[0] + 5, end_point[1] + 5, outline="#a50", fill="#a50")
 
@@ -670,7 +669,7 @@ if __name__ == '__main__':
     start_point = None #(10, 10)
     end_point = None #(190, 190)
 
-    gameField = Field(size=(600, 600))
+    gameField = Field(size=(300, 300))
 
     mutationRate = None #0.1
     crossoverProbability = None #0.7
