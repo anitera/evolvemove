@@ -13,6 +13,7 @@ class Point:
         else:
             self.coord = (10,10) #int(random.random() * 200)
 
+
 class Individ:
     def __init__(self, step, size):
         self.route = np.random.randint(-1, 2, size=(2, size)) * step  # step*(-1) / step*1 / step*0
@@ -70,6 +71,98 @@ class Field:
             for j in range(min(0, center[1] - radius), max(self.field_size[1], center[1] + radius)):
                 if (center[0] - i) ** 2 + (center[1] - j) ** 2 <= radius ** 2:
                     self.matrix[i, j] = 1
+                    
+                    
+    def newstar(self, start, height): #two triangles
+        #coef = width/height
+        coef = 1
+        #self.matrix[start[0], start[1]] = 1
+        for i in range(1, int(0.2*height)+1):
+            coef = 1
+            for j in range(0, i):
+                self.matrix[start[0]+i, start[1]+int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]-int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]] = 1
+                
+        #coef = width/height     
+
+        for i in range(int(0.2*height+1), int(0.8*height-1)):
+            
+            for j in range(0, i):
+                self.matrix[start[0]+i, start[1]+int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]-int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]] = 1
+            #coef = coef - 0.01     
+        for i in range(int(0.2*height)+1, int(height)):
+            for j in range(int(0.8*height-i), 0, -1):
+                self.matrix[start[0]+i, start[1]+int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]-int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]] = 1
+                
+        for i in range(int(0.8*height)-1, height+1):
+            coef = 1
+            for j in range(int(height-i-2), -1, -1):
+                self.matrix[start[0]+i, start[1]+int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]-int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]] = 1
+            #coef = coef + 0.01
+        #self.matrix[start[0]+int(0.8*height+1), start[1]] = 1
+        
+
+    def snowflake(self, center, radius):
+        for i in range(0, radius+1):
+            self.matrix[center[0], center[1]+i] = 1
+            self.matrix[center[0]+i, center[1]] = 1
+            self.matrix[center[0]+i, center[1]+i] = 1
+            self.matrix[center[0], center[1]] = 1
+            self.matrix[center[0]-i, center[1]-i] = 1
+            self.matrix[center[0]-i, center[1]] = 1
+            self.matrix[center[0], center[1]-i] = 1
+            self.matrix[center[0]-i, center[1]+i] = 1
+            self.matrix[center[0]+i, center[1]-i] = 1
+            if i == (radius-1):
+                self.matrix[center[0]+i-1, center[1]-i-1] = 1
+                self.matrix[center[0]+i+1, center[1]-i+1] = 1
+                self.matrix[center[0]-i-1, center[1]+i-1] = 1
+                self.matrix[center[0]-i+1, center[1]+i+1] = 1
+                self.matrix[center[0]-i+1, center[1]-i-1] = 1
+                self.matrix[center[0]-i-1, center[1]-i+1] = 1
+                self.matrix[center[0]+i+1, center[1]+i-1] = 1
+                self.matrix[center[0]+i-1, center[1]+i+1] = 1
+                
+            
+        for i in range(min(0,center[0]-radius), max(self.field_size[0],center[0]+radius)):
+            for j in range(min(0,center[1]-radius), max(self.field_size[1],center[1]+radius)):
+                if (center[0]-i)**2+(center[1]-j)**2 - (radius-1)**2 == 1:
+                    self.matrix[i, j] = 1
+    
+    def сhristmas_tree(self, start, height):
+        for i in range(1, int(0.3*height)+1):
+            coef = 0.6
+            for j in range(0, i):
+                self.matrix[start[0]+i, start[1]+int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]-int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]] = 1
+        for i in range(int(0.3*height)-1, int(0.6*height)+1):
+            coef = 0.8
+            for j in range(0, i-int(0.3*height)+1):
+                self.matrix[start[0]+i, start[1]+int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]-int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]] = 1
+                
+        for i in range(int(0.6*height)-1, int(0.9*height)+1):
+            coef = 1
+            for j in range(0, i-int(0.6*height)+1):
+                self.matrix[start[0]+i, start[1]+int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]-int(j*coef)] = 1
+                self.matrix[start[0]+i, start[1]] = 1
+                
+        for i in range(int(0.9*height)-1, height):
+            coef = 1
+            for j in range(start[1]-int(0.1*height), start[1]+int(0.1*height)+1):
+                self.matrix[start[0]+i, int(j*coef)] = 1
+                    
+
 
     def snowflake(self, center, radius):
         for i in range(0, radius + 1):
@@ -185,10 +278,12 @@ class GA:
         select_prob = reversed_fitness / sum(reversed_fitness)
         selected = np.random.choice(generation.population, 2, replace=False)  # p=select_prob, replace=False)
         return list(selected)
-
+    
+    
     def chooseParents_tournament(self, generation):
         ''' Eficiency depends on tournament size '''
         parents = []
+
         for j in range(0, self.numOfParents):
             selection = []
             for i in range(0, self.tournamentSize):
@@ -207,7 +302,37 @@ class GA:
             randomId = int(random.randrange(0, len(selection)))
             parents.append(selection[randomId])
             print('parent fitness ', parents[j].fitness)
+
         return list(parents)
+    
+    def chooseParents_elittournament(self, generation):
+        ''' Generation could easily degenerate, but for small cases works faster '''
+        parents = []
+        
+        for j in range(0, self.numOfParents):
+            selection = self.getFittestForTournament(generation, self.tournamentSize)
+            randomId = int(random.randrange(0, len(selection)))
+            parents.append(selection[randomId])
+            #print ('selection ', selection)
+            print('parent fitness ', parents[j].fitness)
+        return list(parents)
+    
+    def getFittestForTournament(self, selection, number = None):
+        ''' Choose best individs from list '''
+        if number:
+            population = {}
+            for i in range(0, len(selection.population)):
+                population[selection.population[i].getfitness()] = selection.population[i]
+            fittest = [population[key] for key in sorted(population)[:number]]
+            print('length of fittest ', len(fittest))
+            return fittest
+                
+        else:
+            fittest = selection[0]
+            for s in selection:
+                if fittest.getfitness() >= s.getfitness():
+                    fittest = s
+            return fittest
 
     def getFittestForTournament(self, selection, number=None):
         if number:
@@ -311,7 +436,6 @@ class GUI(Frame):
         super().__init__()
         self.coord = None
         self.initUI(root)
-        self.coord2 = None
 
     def initUI(self, root):
         self.master.title("Project")
@@ -327,6 +451,7 @@ class GUI(Frame):
         self.canvas.create_rectangle(end_point[0], end_point[1], end_point[0]+5, end_point[1]+5, outline="#a50", fill="#a50")
 
         # algorithm
+
         gameField.addSquareBlock((41, 20), (100, 40))
         gameField.addSquareBlock((0, 60), (59, 80))
         gameField.addSquareBlock((60, 100), (100, 120))
@@ -342,20 +467,11 @@ class GUI(Frame):
                 user_crossoverFunction=crossoverFunc, user_parentSelection=parentFunc)
         initialPop = ga.CreateFirstPopulation(user_step=step, user_individSize=individSize,
                                               user_populationSize=populationSize)
-
-        ga2 = GA(user_mutationRate=mutationRate2, user_crossoverProbability=crossoverProbability2, user_elitism=elitism2,
-                user_crossoverFunction=crossoverFunc2, user_parentSelection=parentFunc2)
-        initialPop2 = ga2.CreateFirstPopulation(user_step=step2, user_individSize=individSize2,
-                                              user_populationSize=populationSize2)
-
         print('min fitness ', min(initialPop.getFitness()))
-        print('min fitness ', min(initialPop2.getFitness()))
         print('evolve function: ')
         dont_change = 0
         prev = -1
-        i = -1
-        while (not any(np.array(initialPop.getFitness()) < 9)) and (dont_change < 50):
-            i+=1
+        while (not any(np.array(initialPop.getFitness()) == 0)) and (dont_change < 50):
             initialPop = ga.evolve(step=step, individSize=individSize, populationSize=populationSize,
                                    generation=initialPop,
                                    user_chooseFromAll=chooseFromAll)
@@ -400,6 +516,17 @@ class GUI(Frame):
             else:
                 dont_change = 0
             prev = min(initialPop.getFitness())
+
+
+        best_individ = initialPop.getBest(1)
+        self.coord = best_individ.getFinalRoute()
+
+        for i in range(self.coord.shape[1]):
+            time.sleep(0.005)
+            self.canvas.create_rectangle(self.coord[:, i][0], self.coord[:, i][1], self.coord[:, i][0]+3, self.coord[:, i][1]+3,
+                                    outline="#f50", fill="#f50")
+            self.canvas.update()
+
 
 def anime():
     root = Tk()
@@ -549,6 +676,7 @@ def anime():
     e21.grid(row=16, column=3)
     l21.grid(row=17, column=3)
 
+
     def set_params_first():
         global mutationRate, crossoverProbability, elitism, step, individSize, populationSize, chooseFromAll, crossoverFunc, parentFunc, mutationRate2, crossoverProbability2, elitism2, step2, individSize2, populationSize2, chooseFromAll2, crossoverFunc2, parentFunc2
         crossoverProbability = float(str(e2.get()))
@@ -566,6 +694,7 @@ def anime():
             error2 = Label(root, text='parameters ok', width = 30)
             error2.grid(row=23, column=1)
         step = int(e4.get())
+
         individSize = int(e6.get())
         populationSize = int(e7.get())
 
@@ -594,23 +723,38 @@ def anime():
     b1 = Button(root, text="Start", width = 15, command=ex.animation)
     b1.grid(row = 2, column = 4)
 
+    b = Button(root, text="Coord X Start", width=10, command=lambda: set_params())
+    b.grid(row = 0, column = 4)
+
+    ex = GUI(root)
+    b1 = Button(root, text="Start", command=ex.animation)
+    b1.grid(row = 0, column = 5)
+
     root.mainloop()
 
 if __name__ == '__main__':
     # common parameters for all users
-    start_point = (10, 10)
-    end_point = (190, 190)
-
     gameField = Field(size=(600, 600))
+    
+    gameField.addCircle((90,90), 5)
+    gameField.addSquareBlock((21,30),(40,50))
+    gameField.newstar((10,20), 20)
+    gameField.snowflake((45,50), 5)
+    gameField.сhristmas_tree((50,50), 40)
+    
+    
+    start_point = (10, 10)
+    end_point = (150, 100)
 
     mutationRate = 0.1
     crossoverProbability = 0.7
     elitism = True
     step = 2
-    individSize = 3000
+    individSize = 800
     populationSize = 100
     chooseFromAll = False
     crossoverFunc = 2
+    #'wheel', 'tournament'(for tournament - small tournament size 2-3),'elit_tournament'(for elit big tournamentSize)
     parentFunc = 'wheel'
 
     mutationRate2 = 0.5
