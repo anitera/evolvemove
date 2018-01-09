@@ -594,10 +594,25 @@ def anime():
     b1 = Button(root, text="Start", width = 15, command=ex.animation)
     b1.grid(row = 2, column = 4)
 
+    var8 = IntVar()
+    options4 = [1, 2, 3, 4, 5]
+    def func10(val):
+        global level
+        level = val
+        level_lab = Label(root, text = val)
+        level_lab.grid(row=6, column=4)
+    level = OptionMenu(root, var8, *options4, command=func10)
+    var8.set(1)
+    level_l = Label(root, text='Choose level')
+    level.focus_set()
+    level.grid(row=4, column=4)
+    level_l.grid(row=5, column=4)
+
     root.mainloop()
 
 if __name__ == '__main__':
     # common parameters for all users
+    level = 1
     start_point = (10, 10)
     end_point = (190, 190)
 
