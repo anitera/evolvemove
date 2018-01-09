@@ -316,22 +316,76 @@ class GUI(Frame):
     def initUI(self, root):
         self.master.title("Project")
         self.grid(row = 0, column = 1, rowspan = 20)
-        self.canvas = Canvas(self,width=500, height=500,)
-        self.canvas.create_rectangle(0, 0, 500, 500,
+        self.canvas = Canvas(self,width=600, height=600,)
+        self.canvas.create_rectangle(0, 0, 600, 600,
                                 outline="#00fbaa", fill="#00fbaa")
 
         self.canvas.grid(row=0, column=0, sticky="we")
 
     def animation(self):
-        self.canvas.create_rectangle(start_point[0], start_point[1], start_point[0]+5, start_point[1]+5, outline="#a50", fill="#a50")
-        self.canvas.create_rectangle(end_point[0], end_point[1], end_point[0]+5, end_point[1]+5, outline="#a50", fill="#a50")
+        if level == 1:
+            global start_point, end_point
+            start_point = (10, 10)
+            end_point = (590, 590)
+            self.canvas.create_rectangle(start_point[0], start_point[1], start_point[0] + 5, start_point[1] + 5,
+                                         outline="#a50", fill="#a50")
+            self.canvas.create_rectangle(end_point[0], end_point[1], end_point[0] + 5, end_point[1] + 5, outline="#a50",
+                                         fill="#a50")
 
-        # algorithm
-        gameField.addSquareBlock((41, 20), (100, 40))
-        gameField.addSquareBlock((0, 60), (59, 80))
-        gameField.addSquareBlock((60, 100), (100, 120))
-        gameField.addCircle((100, 120), 10)
-        gameField.addCircle((200, 300), 20)
+            gameField.addCircle((300, 300), 50)
+        elif level == 2:
+            global start_point, end_point
+            start_point = (300, 50)
+            end_point = (300, 550)
+            self.canvas.create_rectangle(start_point[0], start_point[1], start_point[0] + 5, start_point[1] + 5,
+                                         outline="#a50", fill="#a50")
+            self.canvas.create_rectangle(end_point[0], end_point[1], end_point[0] + 5, end_point[1] + 5, outline="#a50",
+                                         fill="#a50")
+            gameField.addSquareBlock((280, 100), (320, 150))
+            gameField.addCircle((265, 250), 50)
+            gameField.addCircle((335, 400), 60)
+        elif level == 3:
+            global start_point, end_point
+            start_point = (25, 25)
+            end_point = (575, 575)
+            self.canvas.create_rectangle(start_point[0], start_point[1], start_point[0] + 5, start_point[1] + 5,
+                                         outline="#a50", fill="#a50")
+            self.canvas.create_rectangle(end_point[0], end_point[1], end_point[0] + 5, end_point[1] + 5, outline="#a50",
+                                         fill="#a50")
+            gameField.addCircle((150, 450), 50)
+            gameField.christmas_tree((250,250),200)
+            gameField.snowflake((150,130),10)
+            gameField.snowflake((200, 430), 10)
+            gameField.snowflake((250, 530), 10)
+            gameField.snowflake((300, 230), 10)
+            gameField.snowflake((350, 400), 10)
+            gameField.snowflake((400, 100), 10)
+            gameField.snowflake((450, 500), 10)
+            gameField.snowflake((500, 250), 10)
+            gameField.snowflake((550, 300), 10)
+        elif level == 4:
+            global start_point, end_point
+            start_point = (300, 50)
+            end_point = (300, 550)
+            self.canvas.create_rectangle(start_point[0], start_point[1], start_point[0] + 5, start_point[1] + 5,
+                                         outline="#a50", fill="#a50")
+            self.canvas.create_rectangle(end_point[0], end_point[1], end_point[0] + 5, end_point[1] + 5, outline="#a50",
+                                         fill="#a50")
+            gameField.addSquareBlock((200, 0), (250, 350))
+            gameField.addSquareBlock((350, 250), (400, 600))
+        elif level == 5:
+            global start_point, end_point
+            start_point = (300, 300)
+            end_point = (550, 550)
+            self.canvas.create_rectangle(start_point[0], start_point[1], start_point[0] + 5, start_point[1] + 5,
+                                         outline="#a50", fill="#a50")
+            self.canvas.create_rectangle(end_point[0], end_point[1], end_point[0] + 5, end_point[1] + 5, outline="#a50",
+                                         fill="#a50")
+            for i in range(25,575,25):
+                for j in range(25,575,25):
+                    gameField.snowflake((i,j),10)
+            gameField.addSquareBlock((200, 0), (250, 350))
+            gameField.addSquareBlock((350, 250), (400, 600))
 
         for i in range(gameField.matrix.shape[0]):
             for j in range(gameField.matrix.shape[1]):
@@ -403,7 +457,7 @@ class GUI(Frame):
 
 def anime():
     root = Tk()
-    root.geometry("1000x800")
+    root.geometry("1000x700")
 
     e2 = Entry(root)
     l2 = Label(root, text='Crossover probability')
@@ -590,10 +644,6 @@ def anime():
     b = Button(root, text="Set parameters", width=15, command=lambda: set_params_first())
     b.grid(row = 0, column = 4)
 
-    ex = GUI(root)
-    b1 = Button(root, text="Start", width = 15, command=ex.animation)
-    b1.grid(row = 2, column = 4)
-
     var8 = IntVar()
     options4 = [1, 2, 3, 4, 5]
     def func10(val):
@@ -608,35 +658,39 @@ def anime():
     level.grid(row=4, column=4)
     level_l.grid(row=5, column=4)
 
+    ex = GUI(root)
+    b1 = Button(root, text="Start", width=15, command=ex.animation)
+    b1.grid(row=2, column=4)
+
     root.mainloop()
 
 if __name__ == '__main__':
     # common parameters for all users
     level = 1
-    start_point = (10, 10)
-    end_point = (190, 190)
+    start_point = None #(10, 10)
+    end_point = None #(190, 190)
 
     gameField = Field(size=(600, 600))
 
-    mutationRate = 0.1
-    crossoverProbability = 0.7
-    elitism = True
-    step = 2
-    individSize = 3000
-    populationSize = 100
-    chooseFromAll = False
-    crossoverFunc = 2
-    parentFunc = 'wheel'
+    mutationRate = None #0.1
+    crossoverProbability = None #0.7
+    elitism = None #True
+    step = None #2
+    individSize = None #3000
+    populationSize = None #100
+    chooseFromAll = None #False
+    crossoverFunc = None #2
+    parentFunc = None #'wheel'
 
-    mutationRate2 = 0.5
-    crossoverProbability2 = 0.9
-    elitism2 = True
-    step2 = 2
-    individSize2 = 3000
-    populationSize2 = 100
-    chooseFromAll2 = False
-    crossoverFunc2 = 2
+    mutationRate2 = None #0.5
+    crossoverProbability2 = None #0.9
+    elitism2 = None #True
+    step2 = None #2
+    individSize2 = None #3000
+    populationSize2 = None #100
+    chooseFromAll2 = None #False
+    crossoverFunc2 = None #2
     # 'wheel', 'tournament'(for tournament - small tournament size 2-3),'elit_tournament'(for elit big tournamentSize)
-    parentFunc2 = 'wheel'
+    parentFunc2 = None #'wheel'
 
     anime()
