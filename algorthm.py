@@ -315,7 +315,7 @@ class GUI(Frame):
 
     def initUI(self, root):
         self.master.title("Project")
-        self.grid(row = 0, column = 1, rowspan = 20)
+        self.grid(row = 0, column = 2, rowspan = 20)
         self.canvas = Canvas(self,width=300, height=300,)
         self.canvas.create_rectangle(0, 0, 300, 300,
                                 outline="#00fbaa", fill="#00fbaa")
@@ -325,6 +325,7 @@ class GUI(Frame):
     def animation(self):
         global start_point, end_point
         if level == 1:
+            gameField.matrix = np.zeros(gameField.matrix.shape)
             self.canvas.create_rectangle(0, 0, 300, 300, outline="#00fbaa", fill="#00fbaa")
             start_point = (10, 10)
             end_point = (290, 290)
@@ -335,6 +336,7 @@ class GUI(Frame):
 
             gameField.addCircle((150, 150), 25)
         elif level == 2:
+            gameField.matrix = np.zeros(gameField.matrix.shape)
             self.canvas.create_rectangle(0, 0, 300, 300, outline="#00fbaa", fill="#00fbaa")
             start_point = (150, 25)
             end_point = (150, 275)
@@ -346,6 +348,7 @@ class GUI(Frame):
             gameField.addCircle((133, 125), 25)
             gameField.addCircle((166, 200), 30)
         elif level == 3:
+            gameField.matrix = np.zeros(gameField.matrix.shape)
             self.canvas.create_rectangle(0, 0, 300, 300, outline="#00fbaa", fill="#00fbaa")
             start_point = (25, 25)
             end_point = (275, 275)
@@ -365,6 +368,7 @@ class GUI(Frame):
             gameField.snowflake((50, 170),5)
             gameField.matrix = gameField.matrix.transpose()
         elif level == 4:
+            gameField.matrix = np.zeros(gameField.matrix.shape)
             self.canvas.create_rectangle(0, 0, 300, 300, outline="#00fbaa", fill="#00fbaa")
             start_point = (25, 150)
             end_point = (275, 150)
@@ -375,6 +379,7 @@ class GUI(Frame):
             gameField.addSquareBlock((100, 0), (250, 175))
             gameField.addSquareBlock((175, 125), (200, 300))
         elif level == 5:
+            gameField.matrix = np.zeros(gameField.matrix.shape)
             self.canvas.create_rectangle(0, 0, 300, 300, outline="#00fbaa", fill="#00fbaa")
             start_point = (150, 150)
             end_point = (295, 295)
@@ -461,20 +466,23 @@ def anime():
     e2 = Entry(root)
     l2 = Label(root, text='Crossover probability')
     e2.focus_set()
-    e2.grid(row=0, column=0)
-    l2.grid(row=1, column=0)
+    e2.insert(0, 0.8)
+    e2.grid(row=0, column=1)
+    l2.grid(row=0, column=0)
 
     e3 = Entry(root)
     l3 = Label(root, text='Mutation rate')
     e3.focus_set()
-    e3.grid(row=2, column=0)
-    l3.grid(row=3, column=0)
+    e3.insert(0, 0.2)
+    e3.grid(row=2, column=1)
+    l3.grid(row=2, column=0)
 
     e4 = Entry(root)
     l4 = Label(root, text='Step')
     e4.focus_set()
-    e4.grid(row=4, column=0)
-    l4.grid(row=5, column=0)
+    e4.insert(0, 2)
+    e4.grid(row=4, column=1)
+    l4.grid(row=4, column=0)
 
     def func1(val):
         global elitism
@@ -484,20 +492,22 @@ def anime():
     l5 = Label(root, text = 'Elitism')
     e5 = OptionMenu(root, var, *options, command=func1)
     e5.focus_set()
-    e5.grid(row=6, column=0)
-    l5.grid(row=7, column=0)
+    e5.grid(row=6, column=1)
+    l5.grid(row=6, column=0)
 
     e6 = Entry(root)
     l6 = Label(root, text='Size of individ')
     e6.focus_set()
-    e6.grid(row=8, column=0)
-    l6.grid(row=9, column=0)
+    e6.insert(0, 2000)
+    e6.grid(row=8, column=1)
+    l6.grid(row=8, column=0)
 
     e7 = Entry(root)
     l7 = Label(root, text='Population size')
     e7.focus_set()
-    e7.grid(row=10, column=0)
-    l7.grid(row=11, column=0)
+    e7.insert(0, 150)
+    e7.grid(row=10, column=1)
+    l7.grid(row=10, column=0)
 
     def func2(val):
         global chooseFromAll
@@ -506,8 +516,8 @@ def anime():
     e8 = OptionMenu(root, var1, *options, command=func2)
     l8 = Label(root, text='Choose from all?')
     e8.focus_set()
-    e8.grid(row=12, column=0)
-    l8.grid(row=13, column=0)
+    e8.grid(row=12, column=1)
+    l8.grid(row=12, column=0)
 
     options3 = [1, 2]
     var7 = IntVar()
@@ -517,8 +527,8 @@ def anime():
     e9 = OptionMenu(root, var7, *options3, command=func8)
     l9 = Label(root, text='Crossover function')
     e9.focus_set()
-    e9.grid(row=14, column=0)
-    l9.grid(row=15, column=0)
+    e9.grid(row=14, column=1)
+    l9.grid(row=14, column=0)
 
     options2 = ['wheel', 'tournament', 'elit_tournament']
     var4 = StringVar()
@@ -528,26 +538,32 @@ def anime():
     e10 = OptionMenu(root, var4, *options2, command=func3)
     l10 = Label(root, text='Parent function')
     e10.focus_set()
-    e10.grid(row=16, column=0)
-    l10.grid(row=17, column=0)
+    e10.grid(row=16, column=1)
+    l10.grid(row=16, column=0)
+
+    l_red = Label(root, text = 'Red player')
+    l_red.grid(row=20, column = 0)
 
     e13 = Entry(root)
     l13 = Label(root, text = 'Crossover probability')
     e13.focus_set()
-    e13.grid(row=0, column=3)
-    l13.grid(row=1, column=3)
+    e13.insert(0, 0.9)
+    e13.grid(row=0, column=4)
+    l13.grid(row=0, column=3)
 
     e14 = Entry(root)
     l14 = Label(root, text='Mutation rate')
     e14.focus_set()
-    e14.grid(row=2, column=3)
-    l14.grid(row=3, column=3)
+    e14.insert(0, 0.3)
+    e14.grid(row=2, column=4)
+    l14.grid(row=2, column=3)
 
     e15 = Entry(root)
     l15 = Label(root, text='Step')
     e15.focus_set()
-    e15.grid(row=4, column=3)
-    l15.grid(row=5, column=3)
+    e15.insert(0, 2)
+    e15.grid(row=4, column=4)
+    l15.grid(row=4, column=3)
 
     options = ['True', 'False']
     var2 = StringVar()
@@ -557,20 +573,22 @@ def anime():
     e16 = OptionMenu(root, var2, *options, command=func4)
     l16 = Label(root, text='Elitism')
     e16.focus_set()
-    e16.grid(row=6, column=3)
-    l16.grid(row=7, column=3)
+    e16.grid(row=6, column=4)
+    l16.grid(row=6, column=3)
 
     e17 = Entry(root)
     l17 = Label(root, text='Size of individ')
     e17.focus_set()
-    e17.grid(row=8, column=3)
-    l17.grid(row=9, column=3)
+    e17.insert(0, 2300)
+    e17.grid(row=8, column=4)
+    l17.grid(row=8, column=3)
 
     e18 = Entry(root)
     l18 = Label(root, text='Population size')
     e18.focus_set()
-    e18.grid(row=10, column=3)
-    l18.grid(row=11, column=3)
+    e18.insert(0, 189)
+    e18.grid(row=10, column=4)
+    l18.grid(row=10, column=3)
 
     var3 = StringVar()
     def fun5(val):
@@ -579,8 +597,8 @@ def anime():
     e19 = OptionMenu(root, var3, *options, command=fun5)
     l19 = Label(root, text='Choose from all?')
     e19.focus_set()
-    e19.grid(row=12, column=3)
-    l19.grid(row=13, column=3)
+    e19.grid(row=12, column=4)
+    l19.grid(row=12, column=3)
 
     var6 = IntVar()
     def func7(val):
@@ -589,8 +607,8 @@ def anime():
     e20 = OptionMenu(root, var6, *options3, command=func7)
     l20 = Label(root, text='Crossover function')
     e20.focus_set()
-    e20.grid(row=14, column=3)
-    l20.grid(row=15, column=3)
+    e20.grid(row=14, column=4)
+    l20.grid(row=14, column=3)
 
     var5 = StringVar()
     def func6(val):
@@ -599,8 +617,11 @@ def anime():
     e21 = OptionMenu(root, var5, *options2, command=func6)
     l21 = Label(root, text='Parent function')
     e21.focus_set()
-    e21.grid(row=16, column=3)
-    l21.grid(row=17, column=3)
+    e21.grid(row=16, column=4)
+    l21.grid(row=16, column=3)
+
+    l_blue = Label(root, text='Blue player')
+    l_blue.grid(row=20, column=3)
 
     def set_params_first():
         global mutationRate, crossoverProbability, elitism, step, individSize, populationSize, chooseFromAll, crossoverFunc, parentFunc, mutationRate2, crossoverProbability2, elitism2, step2, individSize2, populationSize2, chooseFromAll2, crossoverFunc2, parentFunc2
@@ -641,7 +662,7 @@ def anime():
         populationSize2 = int(e18.get())
 
     b = Button(root, text="Set parameters", width=15, command=lambda: set_params_first())
-    b.grid(row = 0, column = 4)
+    b.grid(row = 0, column = 5)
 
     var8 = IntVar()
     options4 = [1, 2, 3, 4, 5]
@@ -654,12 +675,12 @@ def anime():
     var8.set(1)
     level_l = Label(root, text='Choose level')
     level.focus_set()
-    level.grid(row=4, column=4)
-    level_l.grid(row=5, column=4)
+    level.grid(row=4, column=5)
+    level_l.grid(row=5, column=5)
 
     ex = GUI(root)
     b1 = Button(root, text="Start", width=15, command=ex.animation)
-    b1.grid(row=2, column=4)
+    b1.grid(row=2, column=5)
 
     root.mainloop()
 
